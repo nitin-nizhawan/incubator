@@ -1,0 +1,52 @@
+#include<stdio.h>
+char buff[11000];
+long long wa[10][4],acc[10][4];
+int ss1[10][10]={
+    {0,1,2,3,4,5,6,7,8,9},
+    {1,2,3,4,5,6,7,8,9,1},
+    {2,3,4,5,6,7,8,9,1,2},
+    {3,4,5,6,7,8,9,1,2,3},
+    {4,5,6,7,8,9,1,2,3,4},
+    {5,6,7,8,9,1,2,3,4,5},
+    {6,7,8,9,1,2,3,4,5,6},
+    {7,8,9,1,2,3,4,5,6,7},
+    {8,9,1,2,3,4,5,6,7,8},
+    {9,1,2,3,4,5,6,7,8,9}
+};
+
+long long PRIME=1000000007;
+int main(){
+   int T;
+   scanf("%d",&T);
+   while(T-->0){
+       scanf("%s",buff);
+       int i=0;
+       for(int j=0;j<10;j++){
+          for(int l=0;l<4;l++){
+           acc[j][l]=0;
+           wa[j][l]=0;
+          }
+       }
+       while(buff[i]!='\0'){
+           int d = buff[i]-'0';
+           wa[d][0]++;
+           for(int k=0;k<10;k++){
+             for(int l=0;l<3;l++){
+               wa[ss1[k][d]][l+1]=( wa[ss1[k][d]][l+1]+acc[k][l])%PRIME;
+             }
+           }
+           for(int k=0;k<10;k++){
+              for(int l=0;l<4;l++){
+                   acc[k][l]= (acc[k][l]+wa[k][l])%PRIME;
+               wa[k][l]=0;
+              }
+           }
+           i++;
+       }
+       long long ans=0;
+       for(int m=0;m<4;m++){
+           ans = (ans+acc[9][m])%PRIME;
+       }
+       printf("%lld\n",ans);
+   }
+}

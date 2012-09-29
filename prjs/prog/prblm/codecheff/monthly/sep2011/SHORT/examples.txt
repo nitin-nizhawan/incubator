@@ -1,0 +1,250 @@
+Example (n=1 , k=50)
+
+MAX COUNT 2
+
+ Answer : 2
+Example (n=2 , k=50)
+
+MAX COUNT 11
+
+ Answer : 11
+Example (n=3 , k=50)
+
+MAX COUNT 15
+
+ Answer : 15
+Example (n=4 , k=50)
+
+MAX COUNT 25
+
+ Answer : 25
+Example (n=5 , k=50)
+
+MAX COUNT 25
+
+ Answer : 22
+Example (n=6 , k=50)
+
+MAX COUNT 45
+
+ Answer : 45
+Example (n=7 , k=50)
+
+MAX COUNT 45
+
+ Answer : 11
+Example (n=8 , k=50)
+
+MAX COUNT 52
+
+ Answer : 52
+Example (n=9 , k=50)
+
+MAX COUNT 52
+
+ Answer : 34
+Example (n=10 , k=50)
+
+MAX COUNT 52
+
+ Answer : 39
+Example (n=11 , k=50)
+
+MAX COUNT 52
+
+ Answer : 15
+Example (n=12 , k=50)
+
+MAX COUNT 68
+
+ Answer : 68
+Example (n=13 , k=50)
+
+MAX COUNT 68
+
+ Answer : 13
+Example (n=14 , k=50)
+
+MAX COUNT 68
+
+ Answer : 53
+Example (n=15 , k=50)
+
+MAX COUNT 68
+
+ Answer : 31
+Example (n=16 , k=50)
+
+MAX COUNT 68
+
+ Answer : 31
+Example (n=17 , k=50)
+
+MAX COUNT 68
+
+ Answer : 12
+Example (n=18 , k=50)
+
+MAX COUNT 68
+
+ Answer : 68
+Example (n=19 , k=50)
+
+MAX COUNT 68
+
+ Answer : 7
+Example (n=20 , k=50)
+
+MAX COUNT 72
+
+ Answer : 72
+Example (n=21 , k=50)
+
+MAX COUNT 72
+
+ Answer : 32
+Example (n=22 , k=50)
+
+MAX COUNT 72
+
+ Answer : 26
+Example (n=23 , k=50)
+
+MAX COUNT 72
+
+ Answer : 17
+Example (n=24 , k=50)
+
+MAX COUNT 72
+
+ Answer : 70
+Example (n=25 , k=50)
+
+MAX COUNT 72
+
+ Answer : 14
+Example (n=26 , k=50)
+
+MAX COUNT 72
+
+ Answer : 25
+Example (n=27 , k=50)
+
+MAX COUNT 72
+
+ Answer : 26
+Example (n=28 , k=50)
+
+MAX COUNT 72
+
+ Answer : 32
+Example (n=29 , k=50)
+
+MAX COUNT 72
+
+ Answer : 6
+Example (n=30 , k=50)
+
+MAX COUNT 72
+
+ Answer : 63
+Example (n=31 , k=50)
+
+MAX COUNT 72
+
+ Answer : 2
+Example (n=32 , k=50)
+
+MAX COUNT 72
+
+ Answer : 47
+Example (n=33 , k=50)
+
+MAX COUNT 72
+
+ Answer : 18
+Example (n=34 , k=50)
+
+MAX COUNT 72
+
+ Answer : 11
+Example (n=35 , k=50)
+
+MAX COUNT 72
+
+ Answer : 19
+Example (n=36 , k=50)
+
+MAX COUNT 72
+
+ Answer : 43
+Example (n=37 , k=50)
+
+MAX COUNT 72
+
+ Answer : 2
+Example (n=38 , k=50)
+
+MAX COUNT 72
+
+ Answer : 11
+Example (n=39 , k=50)
+
+MAX COUNT 72
+
+ Answer : 9
+Example (n=40 , k=50)
+
+MAX COUNT 72
+
+ Answer : 21
+Example (n=41 , k=50)
+
+MAX COUNT 72
+
+ Answer : 6
+Example (n=42 , k=50)
+
+MAX COUNT 72
+
+ Answer : 25
+Example (n=43 , k=50)
+
+MAX COUNT 72
+
+ Answer : 3
+Example (n=44 , k=50)
+
+MAX COUNT 72
+
+ Answer : 10
+Example (n=45 , k=50)
+
+MAX COUNT 72
+
+ Answer : 5
+Example (n=46 , k=50)
+
+MAX COUNT 72
+
+ Answer : 3
+Example (n=47 , k=50)
+
+MAX COUNT 72
+
+ Answer : 1
+Example (n=48 , k=50)
+
+MAX COUNT 72
+
+ Answer : 1
+Example (n=49 , k=50)
+
+MAX COUNT 72
+
+ Answer : 0
+Example (n=50 , k=50)
+
+MAX COUNT 72
+
+ Answer : 0

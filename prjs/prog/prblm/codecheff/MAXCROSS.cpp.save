@@ -1,0 +1,76 @@
+#include<iostream>
+#include<vector>
+#include<stack>
+#define VVI vector<vector<int>>
+#define VI vector<int>
+#define STACK stack<int>
+using namespace std;
+void hs(VVI &inp){
+    int n = VVI.size();
+    STACK stc_h; 
+    STACK stc_v; 
+    int val_h =0;
+    int val_v=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(inp[i][j]>0){
+                val_h++;
+                stc_h.push(j);
+            } else {
+                while(!stc_h.empty()){
+                    int j_h = stc_h.pop();
+                    if(inp[i][j_h]<val_h){
+                        inp[i][j_h]=val_h;       
+                    }
+                }
+                val_h=0;
+            }   
+            if(inp[j][i]>0){
+                val_v++;
+                stc_v.push(j);
+            } else {
+              while(!stc_v.empty()){
+                  int j_v = stc_v.pop();
+                  if(int[j_v][i]<val_v){
+                      inp[j_v][i] = val_v;
+                  }
+              }
+              val_v=0;
+            }  
+        }
+        while(!stc_h.empty()){
+            int j_h = stc_h.pop();
+            if(inp[i][j_h]<val_h){
+                inp[i][j_h]=val_h;
+            }
+        }
+        val_h=0;
+        while(!stc_v.empty()){
+           int j_v = stc_v.pop();
+           if(int[j_v][i]<val_v){
+                inp[j_v][i] = val_v;
+           }
+        }
+        val_v=0;
+    }
+}
+int main(){
+    int n;
+    char c;
+    cin>n;
+    VVI inp;
+    inp.resize(n);
+    for(int i=0;i<n;i++){
+        inp[i].resize(n);
+        for(int j=0;j<n;j++){
+            cin>>c;
+            if(c=='.'){
+                inp[i][j]=0;
+            } else {
+                inp[i][j]=1;
+            }
+        }
+    }
+    // horizontal scan;
+    hs(inp);
+}

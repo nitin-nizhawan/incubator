@@ -1,0 +1,72 @@
+import java.util.StringTokenizer;
+import java.math.BigInteger;
+public class FairWarning extends BaseSolution{
+	public static void main(String [] args) throws Exception{
+		new FairWarning().start(args[0]);
+	}
+	public String solveTestCase()  throws Exception{
+		setLogToConsole(true);
+		StringTokenizer st  = new StringTokenizer(readLine());
+		int N = Integer.parseInt(st.nextToken());
+		BigInteger ti [] = new BigInteger[N];
+		for(int i=0;i<N;i++){
+			ti[i] = new BigInteger(st.nextToken());
+		}
+		int twoMaxI [] = getTwoMaxValIndex(ti);
+		BigInteger diff = ti[twoMaxI[0]].subtract(ti[twoMaxI[1]]);
+	        log("diff "+diff);
+	        int pUpBound = 2;
+		if(diff.compareTo(BigInteger.ONE)>0){
+	            pUpBound = getUpperBoundPower(diff,twoMaxI[0],ti);
+		}
+		log("pow upper bound "+diff.pow(pUpBound));
+		BigInteger doublingUpperBound = getUpperBoundDoubling(diff,twoMaxI[0],ti,pUpBound);
+		log("dUpperBound + "+doublingUpperBound);
+		BigInteger  y = doublingUpperBound.subtract(ti[twoMaxI[0]]);
+		return y.toString();
+	}
+	BigInteger getUpperBoundDoubling(BigInteger diff,int iMax,BigInteger [] ti,int pUpBound){
+		BigInteger startingValue = diff.pow(pUpBound-1);
+		int doublingCount=0;
+		BigInteger TWO = new BigInteger(2+"");
+		while(ti[iMax].compareTo(startingValue.multiply(TWO.pow(doublingCount)))>0){
+			doublingCount ++;
+		}
+		startingValue = startingValue.multiply(TWO.pow(doublingCount-1));
+	
+		while(ti[iMax].compareTo(startingValue)>0){
+			startingValue = startingValue.add(diff);
+		}
+		return startingValue;
+        	}
+	int getUpperBoundPower(BigInteger diff,int iMax,BigInteger [] ti){
+		int power = 1;
+		BigInteger tmp = diff;
+		while(ti[iMax].compareTo(tmp.pow(power))>0){
+			power++;
+		}
+		return power;
+	}
+	int [] getTwoMaxValIndex(BigInteger ti[]){
+
+		int iMax=0,iSMax=0;
+		BigInteger max=BigInteger.ZERO,smax=BigInteger.ZERO;
+		if(ti[0].compareTo(ti[1])>0){
+			iMax = 0;
+			iSMax = 1;
+		}
+		for(int i=0;i<ti.length;i++){
+			if(ti[i].compareTo(max)>0){
+				iSMax = iMax;
+				smax = max;
+				iMax = i;
+				max = ti[iMax];
+			} else if(ti[i].compareTo(smax)>0&&ti[i].compareTo(max)!=0){
+				iSMax = i;
+				smax = ti[iSMax];
+			}
+		}
+		log("twomax "+ti[iMax]+" , "+ti[iSMax]);
+		return new int[]{iMax,iSMax};
+	}
+}

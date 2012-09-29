@@ -1,0 +1,10 @@
+Case #1: 53922
+Case #2: 52305
+Case #3: 1360
+Case #4: 42
+Case #5: 1359
+Case #6: 7
+Case #7: 42
+Case #8: 384
+Case #9: 53919
+Case #10: 2

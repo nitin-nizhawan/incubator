@@ -1,0 +1,15 @@
+3 5
+aabcbcbca
+3 5
+baaaababababbababbab
+1 4
+abcd
+2 4
+aaaaaaaaaaa
+1 11
+aaaaaaaaaaa
+1 11
+aaaaabaaaaa
+2 4
+abcdefghikkihgfefatdabcd
+0 0

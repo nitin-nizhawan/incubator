@@ -1,0 +1,3 @@
+#!/bin/bash
+gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=png16m -dGraphicsAlphaBits=4       -sOutputFile=out.png $1
+eog out.png

@@ -1,0 +1,113 @@
+#include<stdio.h>
+char buff[11000];
+long long acc[10][4];
+int ss1[10][10]={
+    {0,1,2,3,4,5,6,7,8,9},
+    {1,2,3,4,5,6,7,8,9,1},
+    {2,3,4,5,6,7,8,9,1,2},
+    {3,4,5,6,7,8,9,1,2,3},
+    {4,5,6,7,8,9,1,2,3,4},
+    {5,6,7,8,9,1,2,3,4,5},
+    {6,7,8,9,1,2,3,4,5,6},
+    {7,8,9,1,2,3,4,5,6,7},
+    {8,9,1,2,3,4,5,6,7,8},
+    {9,1,2,3,4,5,6,7,8,9}
+};
+int ssinv[10][10]={
+   {0,1,2,3,4,5,6,7,8,9},
+   {0,9,1,2,3,4,5,6,7,8},
+   {0,8,9,1,2,3,4,5,6,7},
+   {0,7,8,9,1,2,3,4,5,6},
+   {0,6,7,8,9,1,2,3,4,5},
+   {0,5,6,7,8,9,1,2,3,4},
+   {0,4,5,6,7,8,9,1,2,3},
+   {0,3,4,5,6,7,8,9,1,2},
+   {0,2,3,4,5,6,7,8,9,1},
+   {0,1,2,3,4,5,6,7,8,9}
+};
+long long PRIME=1000000007;
+int freq[10];
+int T2(int i,int target){
+        int d=buff[i]-'0';
+        if(target==0&&d>0){
+            return 0;
+        }
+        if(target==0&&d==0){
+            return freq[0];
+        }
+        if(target==d){
+            return (freq[0]+freq[9])%PRIME;
+        }
+        return freq[ssinv[d][target]];
+}
+int T3(int i,int target){
+        int d=buff[i]-'0';
+        if(target==0&&d>0){
+            return 0;
+        }
+        if(target==0&&d==0){
+            return T2(i-1,0);
+        }
+        if(target==d){
+            return (T2(i-1,0)+T2(i-1,9))%PRIME;
+        }
+        return T2(i-1,ssinv[d][target]);
+}
+int T4(int i,int target){
+        int d=buff[i]-'0';
+        if(target==0&&d>0){
+            return 0;
+        }
+        if(target==0&&d==0){
+            return T3(i-1,0);
+        }
+        if(target==d){
+            return (T3(i-1,0)+T3(i-1,9))%PRIME;
+        }
+        return T3(i-1,ssinv[d][target]);
+}
+int main(){
+   int T;
+   scanf("%d",&T);
+   while(T-->0){
+       scanf("%s",buff);
+       int i=0;
+       for(int j=0;j<10;j++){
+          freq[j]=0;
+       }
+       int ans=0;
+       int a1=0,a2=0,a3=0,a4=0;
+       while(buff[i]!='\0'){
+           int d = buff[i]-'0';
+           freq[d]++; 
+           if(d==9){
+               a1++;
+           }
+          if(i>0){
+             // T29
+		 freq[buff[i]-'0']--;
+                 
+                 //ans=(ans+T2(i,9))%PRIME;
+                   a2=(a2+T2(i,9))%PRIME;
+		 if(i>1){
+			 freq[buff[i-1]-'0']--;
+			 //ans=(ans+T3(i,9))%PRIME; 
+                           a3 = (a3 + T3(i,9))%PRIME;
+			 if(i>2){
+				 freq[buff[i-2]-'0']--;
+				 //ans=(ans+T4(i,9))%PRIME;
+                                   a4 = (a4 + T4(i,9))%PRIME;
+				 freq[buff[i-2]-'0']++;
+			 }
+			 freq[buff[i-1]-'0']++;
+		 }
+		 freq[buff[i]-'0']++;
+	  }
+          
+       printf("iter=%d,a1=%d,a2=%d,a3=%d,a4=%d\n",i,a1,a2,a3,a4);
+	  i++;
+       }
+       //ans=(ans+freq[9])%PRIME;
+       printf("%d\n",a1+a2+a3+a4);
+   }
+}
