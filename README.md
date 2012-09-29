@@ -1,4 +1,4 @@
 incubator
 =========
 
-here projects are born, grown. Some become a full fledged public project and some die
+here projects are born and grown. Some become a full fledged public projects and some die
