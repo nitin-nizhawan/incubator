@@ -1,0 +1,94 @@
+<html>
+<head>
+<script src="../backend/common.c.js"></script>
+<script src="../backend/large.c.js"></script>
+<script src="../backend/zint.h.js"></script>
+<script src="../backend/pdf417.c.js"></script>
+<script src="../backend/svg.c.js"></script>
+<script src="../backend/ps.c.js"></script>
+<script src="../backend/pnglib.js"></script>
+<script src="../backend/png.c.js"></script>
+<script>
+var dbg="";
+
+function init(){
+/*struct zint_symbol**/ var symbol;
+	/*int*/var i;
+
+	symbol = new zint_symbol();//(struct zint_symbol*)malloc(sizeof(*symbol));
+	//if (!symbol) return NULL;
+
+	//memset(symbol, 0, sizeof(*symbol));
+	symbol./*->*/symbology = BARCODE_PDF417;
+	symbol./*->*/height = 0;
+	symbol./*->*/whitespace_width = 0;
+	symbol./*->*/border_width = 0;
+	symbol./*->*/output_options = 0;
+	symbol./*->*/rows = 0;
+	symbol./*->*/width = 0;
+	/*strcpy*/(symbol./*->*/fgcolour=/*,*/ "000000");
+	/*strcpy*/(symbol./*->*/bgcolour=/*,*/ "ffffff");
+	/*strcpy*/(symbol./*->*/outfile=/*,*/ "");
+	symbol./*->*/scale = 1.0;
+	symbol./*->*/option_1 = -1;
+	symbol./*->*/option_2 = 0;
+	symbol./*->*/option_3 = 928; // PDF_MAX
+	symbol./*->*/show_hrt = 1; // Show human readable text
+	symbol./*->*/input_mode = DATA_MODE;
+	/*strcpy*/(symbol./*->*/primary=/*,*/ "");
+	//memset(&(symbol./*->*/encoded_data[0][0]),0,sizeof(symbol./*->*/encoded_data));
+	for(i = 0; i < 178; i++) {
+                symbol./*->*/row_height[i] = 0;
+        }
+	symbol./*->*/bitmap = null;
+	symbol./*->*/bitmap_width = 0;
+	symbol./*->*/bitmap_height = 0;
+	
+	//return symbol;
+	pdf417enc(symbol,"9971847784",10);
+	var ans = svg_plot(symbol);
+	var ps = ps_plot(symbol);
+	var pngout = png_plot(symbol);
+	var p = new PNGlib(symbol.width, symbol.height, 256);
+	for(var _x=0;_x<symbol.rows;_x++){
+	    for(var _y=0;_y<symbol.width;_y++){
+		     if(module_is_set(symbol,_x,_y)){
+		         p.buffer[p.index(_y,3*_x)]=p.color(0,0,0);
+				 p.buffer[p.index(_y,3*_x+1)]=p.color(0,0,0);
+				 p.buffer[p.index(_y,3*_x+2)]=p.color(0,0,0);
+				// p.buffer[p.index(_y,3*_x+2)]=p.color(0,0,0);
+			 } else {
+			     p.buffer[p.index(_y,3*_x)]=p.color(255,255,255);
+				  p.buffer[p.index(_y,3*_x+1)]=p.color(255,255,255);
+				 p.buffer[p.index(_y,3*_x+2)]=p.color(255,255,255);
+				 //p.buffer[p.index(_y,2*_x+1)]=p.color(255,255,255);
+			 }
+		}
+	}
+		var pngelem = document.createElement("DIV"); 
+	document.getElementById("pngplaceholder").appendChild(pngelem);
+	pngelem.innerHTML='<img src="data:image/png;base64,'+pngout.getBase64()+'">';
+	var svgStart = ans.search("<svg");
+	var svgEnd = ans.search("</svg>") + 5;
+	var dispstr = ans.substring(svgStart,svgEnd+1);
+	document.getElementById("dispdiv").innerHTML=dispstr;
+	console.log(dbg);
+	for(var i=0;i<symbol.encoded_data.length;i++){
+	 //   console.log(symbol.encoded_data[i].join(","));
+	}
+	
+	
+}
+</script>
+
+</head>
+<body>
+<div id="dispdiv"></div>
+<br/>
+<div id="pngplaceholder"></div>
+<script>
+init();
+</script>
+</body>
+
+</html>
