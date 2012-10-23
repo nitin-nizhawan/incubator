@@ -10,9 +10,8 @@
 <script src="../backend/png.c.js"></script>
 <script>
 var dbg="";
-
-function init(){
-/*struct zint_symbol**/ var symbol;
+function genbc(data){
+   var symbol;
 	/*int*/var i;
 
 	symbol = new zint_symbol();//(struct zint_symbol*)malloc(sizeof(*symbol));
@@ -29,7 +28,7 @@ function init(){
 	/*strcpy*/(symbol./*->*/fgcolour=/*,*/ "000000");
 	/*strcpy*/(symbol./*->*/bgcolour=/*,*/ "ffffff");
 	/*strcpy*/(symbol./*->*/outfile=/*,*/ "");
-	symbol./*->*/scale = 1.0;
+	symbol./*->*/scale = 5.0;
 	symbol./*->*/option_1 = -1;
 	symbol./*->*/option_2 = 0;
 	symbol./*->*/option_3 = 928; // PDF_MAX
@@ -43,13 +42,15 @@ function init(){
 	symbol./*->*/bitmap = null;
 	symbol./*->*/bitmap_width = 0;
 	symbol./*->*/bitmap_height = 0;
-	
-	//return symbol;
-	pdf417enc(symbol,"9971847784",10);
-	var ans = svg_plot(symbol);
-	var ps = ps_plot(symbol);
+	pdf417enc(symbol,data,data.length);
+	return symbol;
+}
+function init(){
+   var symbol = genbc(document.getElementById("inpdiv").value);
+	var svgout = svg_plot(symbol);
+	var psout = ps_plot(symbol);
 	var pngout = png_plot(symbol);
-	var p = new PNGlib(symbol.width, symbol.height, 256);
+	/*var p = new PNGlib(symbol.width, symbol.height, 256);
 	for(var _x=0;_x<symbol.rows;_x++){
 	    for(var _y=0;_y<symbol.width;_y++){
 		     if(module_is_set(symbol,_x,_y)){
@@ -64,13 +65,17 @@ function init(){
 				 //p.buffer[p.index(_y,2*_x+1)]=p.color(255,255,255);
 			 }
 		}
-	}
-		var pngelem = document.createElement("DIV"); 
-	document.getElementById("pngplaceholder").appendChild(pngelem);
-	pngelem.innerHTML='<img src="data:image/png;base64,'+pngout.getBase64()+'">';
-	var svgStart = ans.search("<svg");
-	var svgEnd = ans.search("</svg>") + 5;
-	var dispstr = ans.substring(svgStart,svgEnd+1);
+	}*/
+		
+	document.getElementById("pngplaceholder").innerHTML='<a  href="data:image/png;base64,'+
+	                                                           pngout.getBase64()+'">PNG File</a><br/>'+
+													    '<a href="data:application/postscript,'+
+	                                                     psout+'" >PostScript</a><br/>'+
+														 '<a href="data:image/svg+xml;base64,'+
+														 btoa(svgout)+'">SVG File</a><br/>';
+	var svgStart = svgout.search("<svg");
+	var svgEnd = svgout.search("</svg>") + 5;
+	var dispstr = svgout.substring(svgStart,svgEnd+1);
 	document.getElementById("dispdiv").innerHTML=dispstr;
 	console.log(dbg);
 	for(var i=0;i<symbol.encoded_data.length;i++){
@@ -83,8 +88,13 @@ function init(){
 
 </head>
 <body>
+<label>Input</label><br/>
+<textarea id="inpdiv" rows=10 cols=40 >Hello</textarea>
+<br/>
+<input type=button onclick="init()" value="Generate" />
 <div id="dispdiv"></div>
 <br/>
+Download As:<br/>
 <div id="pngplaceholder"></div>
 <script>
 init();
