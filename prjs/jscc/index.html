@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>JSCC</title>
+<style>
+body{
+  margin:0px;
+  padding:0px;
+  background-color:blue;
+  font-family:'Courier New';
+}
+textarea{
+  background-color:black;
+  color:white;
+  border:0px;
+}
+label {
+  font-weight:bold;
+  color:white;
+}
+</style>
+<script src="js/jscc.js" ></script>
+<script>
+function runit(){
+   tptr=0;
+  var srccddiv = document.getElementById("srccd");
+   var inptdiv = document.getElementById("inpt");
+   var outptdiv = document.getElementById("outpt");
+   var dbgv = document.getElementById("dbgwin");
+    outptdiv.value="";
+	dbgv.value="";
+	//inptdiv.value="";
+	
+	var strs = inptdiv.value.split(" ");
+	var next=0;
+try{
+	
+	JSCC.exec(srccddiv.value);
+	} catch(e){
+	    dbgv.style.color='red';
+	    dbgv.value=e.message;
+		throw new Error("Terminated Abnormally");
+	}
+	dbgv.style.color='white';
+	dbgv.value+="\nExecution completed successfully\n";
+	dbgv.scrollTop = dbgv.scrollHeight;
+
+}
+</script>
+</head>
+<body >
+<h2 style="background-color:blue;border:1px white solid;padding:0px;margin:0px;color:white;">COOL2JS compiler</h2>
+<br/>
+<table>
+<tr>
+<td>
+<label>Source:</label>
+</td><td><label>Output:</label></td>
+</tr>
+<tr>
+<td>
+<textarea style="display:block;" rows="20" cols="60" id="srccd" >
+int main(){
+   putc('h');
+}
+</textarea>
+</td>
+<td>
+
+<textarea rows="20" cols="60" id="outpt" ></textarea>
+</td></tr>
+<tr>
+<tr>
+<td><label>Input:</label></td><td><label>Compiler Log:</label>	</td>
+</tr>
+<td>
+
+<textarea rows="10" cols="60" id="inpt" ></textarea>
+</td>
+<td>
+
+<textarea rows="10" cols="60" id="dbgwin" ></textarea>
+</td>
+</tr>
+<tr>
+<td>
+<input type="button" value="Execute" onclick="runit()" />
+</td>
+</tr>
+</table>
+
+</body>
+</html>
