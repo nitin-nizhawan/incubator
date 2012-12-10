@@ -10,7 +10,7 @@ performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1: 
-            this.$=$$[$0]; console.log($$[$0]);
+            this.$=$$[$0]; 
             function dump(obj){
                  var str="";
                  if(typeof(obj)=="undefined") return str;
@@ -38,48 +38,169 @@ case 1:
                  return str;
             }
 
+            function genbody(obj){
+                out=[];
+                 out.push(69,29); //push ra
+                    
+                 out.pop(70,29);
+                return out;
+            }
+  
+            function gencode(obj){
+                   var out=[]
+                   if(obj.type&&obj.type=="func_def"){
+                       out.push("{gdef:'"+obj.dec.id+"'}");
+                       out = out.concat(genbody(obj.body));
+                   }
+                   return out;
+            }
+//            console.log(gencode($$[$0][1]).join(","));
+  //          console.log(dump($$[$0]));
 
+              console.log($$[$0]);
 
-            console.log(dump($$[$0]));
+              yy.ast = $$[$0];
           
 break;
-case 2: this.$ = $$[$0];
+case 2: this.$ = new yy.ds.Identifier().init($$[$0]);
 break;
-case 4: this.$ = $$[$0]; 
+case 3: this.$ = new yy.ds.Constant().init($$[$0]); 
+break;
+case 4: this.$ = new yy.ds.StringLiteral().init($$[$0]); 
 break;
 case 5: this.$ = $$[$0-1]; 
 break;
 case 6: this.$=$$[$0];
 break;
-case 9: this.$ = {expr:$$[$0-3],args:$$[$0-1]};  
+case 8: this.$ = new yy.ds.Dispatch().init($$[$0-2],[]);  
+break;
+case 9: this.$ = new yy.ds.Dispatch().init($$[$0-3],$$[$0-1]);  
+break;
+case 14: this.$=[$$[$0]]; 
+break;
+case 15: $$[$0-2].push($$[$0]); this.$=$$[$0-2]; 
 break;
 case 16: this.$ = $$[$0]; 
 break;
+case 80: this.$ = new yy.ds.DeclarationSpecifiers().init($$[$0]); 
+break;
+case 93: this.$ = $$[$0]; 
+break;
+case 94: this.$ = $$[$0]; 
+break;
+case 95: this.$ = $$[$0]; 
+break;
+case 96: this.$ = $$[$0]; 
+break;
+case 97: this.$ = $$[$0]; 
+break;
+case 98: this.$ = $$[$0]; 
+break;
+case 99: this.$ = $$[$0]; 
+break;
+case 100: this.$ = $$[$0]; 
+break;
+case 101: this.$ = $$[$0]; 
+break;
+case 102: this.$ = $$[$0]; 
+break;
+case 103: this.$ = $$[$0]; 
+break;
+case 104: this.$ = $$[$0]; 
+break;
+case 113: $$[$0].push($$[$0-1]); this.$=$$[$0]; 
+break;
+case 114: this.$=[$$[$0]]; 
+break;
+case 115: $$[$0].push($$[$0-1]); this.$=$$[$0]; 
+break;
+case 116: this.$=[$$[$0]]; 
+break;
+case 131: this.$=[$$[$0-1],$$[$0]];
+break;
+case 132: this.$=new yy.ds.Declarator().init($$[$0]); 
+break;
 case 133: this.$=$$[$0]; 
 break;
-case 137: $$[$0-3].params=$$[$0-2]; this.$=$$[$0-3]; 
+case 134: this.$= $$[$0-1]; 
 break;
-case 139:  this.$={id:$$[$0-2],params:[]}; 
+case 137:  this.$ = new yy.ds.FunctionDeclarator().init($$[$0-3],$$[$0-1]); 
 break;
-case 183: this.$ = $$[$0-1]; 
+case 138: this.$ = new yy.ds.DirectDeclarator().init($$[$0-3],$$[$0-1]); 
 break;
-case 188: this.$ = [$$[$0]]; 
+case 139: this.$ = new yy.ds.FunctionDeclarator().init($$[$0-2],null); 
 break;
-case 189:$$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+case 144: this.$=[$$[$0]];
+break;
+case 145: $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+break;
+case 146: this.$ = $$[$0]; 
+break;
+case 148: this.$=[$$[$0]];
+break;
+case 149: $$[$0-2].push($$[$0]); this.$=$$[$0-2]; 
+break;
+case 150: this.$ = [$$[$0-1],$$[$0]]; 
+break;
+case 151:  this.$ = [$$[$0-1],$$[$0]];
+break;
+case 152: this.$ = [$$[$0]]; 
+break;
+case 153: this.$ =[$$[$0]]; 
+break;
+case 154: $$[$0-2].push($$[$0]); this.$=$$[$0-2]; 
+break;
+case 155:this.$=[$$[$0]];
+break;
+case 156: this.$=[$$[$0-1],$$[$0]]; 
+break;
+case 157: this.$ = $$[$0]; 
+break;
+case 158: this.$=$$[$0]; 
+break;
+case 159: this.$=[$$[$0-1],$$[$0]]; 
+break;
+case 160: this.$ = $$[$0-1]; 
+break;
+case 166: this.$ = $$[$0-1]; 
+break;
+case 168: $$[$0-3].params=$$[$0-1]; this.$=$$[$0-3]; 
+break;
+case 175: this.$ = $$[$0];
+break;
+case 176: this.$ = $$[$0];
+break;
+case 182: this.$ = new yy.ds.CompoundStatement().init(new yy.ds.DeclarationList().init(),new yy.ds.StatementList().init()); 
+break;
+case 183: this.$ = new yy.ds.CompoundStatement().init(new yy.ds.DeclarationList().init(),$$[$0-1]); 
+break;
+case 184: this.$ = new yy.ds.CompoundStatement().init($$[$0-1],new yy.ds.StatementList().init()); 
+break;
+case 185: this.$ = new yy.ds.CompoundStatement().init($$[$0-2],$$[$0-1]); 
+break;
+case 186: this.$=[$$[$0]]; 
+break;
+case 187: this.$ = $$[$0-1]; this.$.push($$[$0]); 
+break;
+case 188: this.$ = new yy.ds.StatementList().init($$[$0]); 
+break;
+case 189:this.$=$$[$0-1].append($$[$0]);  
 break;
 case 190: this.$="null"; 
 break;
 case 191: this.$  = $$[$0-1];  
 break;
-case 201: this.$= [$$[$0]]; 
+case 201: this.$= new yy.ds.TranslationUnit().init($$[$0]) ; 
 break;
-case 202: $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+case 202: $$[$0-1].append($$[$0]); this.$=$$[$0-1]; 
 break;
-case 203: this.$= $$[$0]; 
+case 203: this.$= new yy.ds.ExternalDeclaration().init($$[$0]); 
 break;
 case 204: this.$ = $$[$0]; 
 break;
-case 206: this.$={type:'func_def',dec_spec:$$[$0-2],dec:$$[$0-1],body:$$[$0]}; 
+case 205: this.$={type:'func_def',dec_spec:$$[$0-3],dec:$$[$0-2],dec_list:$$[$0-1],body:$$[$0]}; 
+break;
+case 206: this.$=new yy.ds.FunctionDefinition().init($$[$0-2],$$[$0-1],null,$$[$0]);  //{type:'func_def',dec_spec:$$[$0-2],dec:$$[$0-1],body:$$[$0]}; 
 break;
 }
 },
@@ -365,43 +486,67 @@ lexer.performAction = function anonymous(yy,yy_,$avoiding_name_collisions,YY_STA
 
 var YYSTATE=YY_START
 switch($avoiding_name_collisions) {
-case 0:return 91;
+case 0:return 89;
 break;
-case 1:return 6
+case 1:return 91;
 break;
-case 2:return 101
+case 2:return 88;
 break;
-case 3:return 103
+case 3:return 136;
 break;
-case 4:return 9
+case 4:return 6
 break;
-case 5:return 11 
+case 5:return 7
 break;
-case 6:return 75
+case 6:return 18
 break;
-case 7:
+case 7:return 28
+break;
+case 8:return 101
+break;
+case 9:return 103
+break;
+case 10:return 9
+break;
+case 11:return 11 
+break;
+case 12:return 75
+break;
+case 13:return 21;
+break;
+case 14:
+                     console.log("Matched first quote");
                      this.begin("STRING");
                      yy.buff="";
                   
 break;
-case 8:
+case 15:
                      this.begin("INITIAL");
                      yy_.yytext=yy.buff;
                      return 8;
                  
 break;
-case 9:
+case 16:
+                    
+                       yy.buff+="\n";
+                
+break;
+case 17:
+                         yy.buff+=yy_.yytext[1];
+                   
+break;
+case 18:
                          yy.buff+=yy_.yytext;
                  
 break;
-case 10:
+case 19:
 break;
-case 11: return 'INVALID';
+case 20: return 'INVALID';
 break;
 }
 };
-lexer.rules = [/^(?:int\b)/,/^(?:([a-zA-Z_])(([a-zA-Z_])|([0-9]))*)/,/^(?:\{)/,/^(?:\})/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:")/,/^(?:")/,/^(?:.)/,/^(?:([\s\f\t\v\r])+)/,/^(?:.)/];
-lexer.conditions = {"STRING":{"rules":[8,9],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,10,11],"inclusive":true}};
+lexer.rules = [/^(?:(char\b))/,/^(?:(int\b))/,/^(?:(void\b))/,/^(?:(while\b))/,/^(?:([a-zA-Z_])(([a-zA-Z_])|([0-9]))*)/,/^(?:([0-9])+)/,/^(?:\+\+)/,/^(?:\*)/,/^(?:\{)/,/^(?:\})/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:,)/,/^(?:")/,/^(?:")/,/^(?:\\n\b)/,/^(?:\\.)/,/^(?:.)/,/^(?:([\s\f\t\v\r])+)/,/^(?:.)/];
+lexer.conditions = {"STRING":{"rules":[15,16,17,18],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,19,20],"inclusive":true}};
 return lexer;})()
 parser.lexer = lexer;
 function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Parser;

@@ -11,21 +11,16 @@ L               [a-zA-Z_]
 H               [a-fA-F0-9]
 WHITESPACE      [\s\f\t\v\r]
 INT             "int"
-CHAR            "char"
 VOID            "void"
-WHILE           "while"
  /* 10.1 Integers, Identifiers, and Special Notation */
 
 %x STRING
 %%
-{CHAR}            return 'CHAR';
 {INT}             return 'INT';
 {VOID}            return 'VOID';
-{WHILE}           return 'WHILE';
 {L}({L}|{D})*     return 'IDENTIFIER'
 {D}+              return 'CONSTANT'
-"++"              return 'INC_OP'
-"*"               return '*'
+
 "{"               return '{'
 "}"               return '}'
 "("               return '('
@@ -43,17 +38,12 @@ WHILE           "while"
                      yytext=yy.buff;
                      return 'STRING_LITERAL';
                  }
-<STRING>\\n     {
-                    
-                       yy.buff+="\n";
-                }				 
-<STRING>\\.        {
-                         yy.buff+=yytext[1];
-                   }
 <STRING>.        {
                          yy.buff+=yytext;
                  }
-
+<STRING>\\.        {
+                         yy.buff+=yytext;
+                 }
 {WHITESPACE}+    {}
 .                { return 'INVALID';}
 /lex
@@ -140,7 +130,6 @@ postfix_expression
           { $$=$1;}
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
-	       { $$ = new yy.ds.Dispatch().init($1,[]);  }
 	| postfix_expression '(' argument_expression_list ')'
           { $$ = new yy.ds.Dispatch().init($1,$3);  }
 	| postfix_expression '.' IDENTIFIER
@@ -396,7 +385,6 @@ type_qualifier
 
 declarator
 	: pointer direct_declarator
-	   { $$=[$1,$2];}
 	| direct_declarator
          { $$=new yy.ds.Declarator().init($1); }
 	;
@@ -409,9 +397,9 @@ direct_declarator
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
 	| direct_declarator '(' parameter_type_list ')'
-           {  $$ = new yy.ds.FunctionDeclarator().init($1,$3); }
-	| direct_declarator '(' identifier_list ')'
            { $$ = new yy.ds.DirectDeclarator().init($1,$3); }
+	| direct_declarator '(' identifier_list ')'
+           { $$ = new yy.ds.FunctionDeclarator().init($1,$3); }
 	| direct_declarator '(' ')'
            { $$ = new yy.ds.FunctionDeclarator().init($1,null); }
 	;
@@ -446,9 +434,9 @@ parameter_list
 
 parameter_declaration
 	: declaration_specifiers declarator
-             { $$ = [$1,$2]; }
+             {$$ = [$1,$2]; }
 	| declaration_specifiers abstract_declarator
-             {  $$ = [$1,$2];}
+             { $$ = [$1,$2];}
 	| declaration_specifiers
              { $$ = [$1]; }
 	;
@@ -469,11 +457,9 @@ type_name
 
 abstract_declarator
 	: pointer
-	   { $$ = $1; }
 	| direct_abstract_declarator
                { $$=$1; }
 	| pointer direct_abstract_declarator
-	         { $$=[$1,$2]; }
 	;
 
 direct_abstract_declarator

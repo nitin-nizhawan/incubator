@@ -1,0 +1,163 @@
+<html>
+<head>
+<script src="cpu.js"></script>
+<script src="loader.js"></script>
+<script src="runtime.js"></script>
+<script src="hw.js"></script>
+<script>
+var execcode=[
+        
+              0, // nop
+			// preamble
+			  770,13, //jmp to start
+			// method definition
+              258,0,0,  // ldi $a 0
+              262,1, // popr $b
+			  258,2,12, // ldi $c 12
+			  1,  //syscall
+			  769, //ret
+			
+			//  program start
+			  258,0,21, // ldi $a stringaddr
+			  261,0,// push it onto stack
+			  768,3, // call print
+			  2,  // halt
+			  // data section
+			  72,101,108,108,111,32,87,111,114,108,100,10,
+              			  // Hello World\n
+			];
+function StringStream(){
+   this.str="";
+   this.strpos=0;
+}
+StringStream.prototype={
+  write:function(code){
+      this.str+=String.fromCharCode(code);
+  },
+  read:function(){
+      return this.str.charCodeAt(this.strpos++);
+  }
+}
+function linkLibs(libs,cpu){
+   // step 1. go over libs one by one and collect local and global definitions
+   var global_defs={};
+   var localdefs=[];
+   var beginCode = 3;// we begin loading code at address 3;
+      // read code section to collect local and global references;
+   var codebytes=[0,770,0];
+   for(var i=0;i<libs.length;i++){
+       localdefs.push({});
+	   localdefs.codebegin=beginCode;
+	   for(var j=0;j<libs[i][0].length;){
+	       var obj = libs[i][0][j];
+		   console.log(obj);
+	       if(typeof(obj)=="number"){
+		       j+=cpu.getInstrSize(obj);
+			   beginCode+=cpu.getInstrSize(obj);
+		   } else if("gdef" in obj){
+		       j++;
+			   global_defs[obj.gdef]=beginCode;
+		   } else if("def" in obj){
+		       j++;
+			   localdefs[i][obj.def]=beginCode;
+		   }
+	   }
+	}   
+	console.log(global_defs);
+	console.log(localdefs);
+	   // read data section to collect local and global references;
+	   for(var i=0;i<libs.length;i++){
+	       localdefs.databegin=beginCode;
+		   for(var j=0;j<libs[i][1].length;j++){
+		       var obj=libs[i][1][j];
+			   if(typeof(obj)=="number"){
+			       beginCode++;
+			   } else if("gdef" in obj){
+			        global_defs[obj.gdef]=beginCode;
+			   } else if("def" in obj){
+			        localdefs[i][obj.def]=beginCode;
+			   }    
+		   }
+	   }
+	   console.log(global_defs);
+	console.log(localdefs);
+	   // output code bytes
+	   codebytes[2]=global_defs["__start"]; // set jump pointer
+	   for(var i=0;i<libs.length;i++){
+	       for(var j=0;j<libs[i][0].length;){
+		       var obj=libs[i][0][j];
+			   if(typeof(obj)=="number"){
+			        var isize = cpu.getInstrSize(obj);
+					for(var k=0;k<isize;k++){
+					    obj = libs[i][0][j+k];
+					    if(typeof(obj)=="number"){
+						    codebytes.push(obj);
+						} else if("ref" in obj){
+						    if(localdefs[i][obj.ref]){
+							   codebytes.push(localdefs[i][obj.ref]);
+							} else if(global_defs[obj.ref]){
+							    codebytes.push(global_defs[obj.ref]);
+							} else {
+							   throw new Error("Linker Error: cannot resolve "+obj.ref+" in lib "+ i +" ");
+							}
+						} else {
+						   throw new Error("Linker Error: invalid data in lib "+i+" at pos "+j+" ");
+						}
+					}
+					j+=isize;
+			   } else {
+			        j++;
+			   }
+		   }
+	   }
+	   // output data bytes;
+	   for(var i=0;i<libs.length;i++){
+	        for(var j=0;j<libs[i][1].length;j++){
+			    var obj = libs[i][1][j];
+				if(typeof(obj)=="number"){
+				   codebytes.push(obj);  
+				} 
+			}
+	   }
+	 return codebytes;
+}
+function loadCode(cpu,cb){
+    var ctx={ascii:function (str){
+      var ret=[];
+	  for(var i=0;i<str.length;i++){
+	      ret.push(str.charCodeAt(i));
+	  }
+	  return ret;
+     }};
+    var hw = lib_hw(ctx);
+	var runtime = lib_runtime(ctx);
+	var libs=[hw,runtime];
+	//
+	var code = linkLibs(libs,cpu);
+	console.log(code);
+	//console.log(hw);
+	//console.log(runtime);
+	cb(code);
+}
+function doexec(){
+    // link code
+	 var cpu = new CPU();
+	 var instr = new StringStream();
+	var outstr = new StringStream();
+	cpu.init(64*1024,instr,outstr);// 64K words
+	
+    loadCode(cpu,function(ecode){
+	console.log(ecode);
+   	var loader = new Loader();
+	loader.init(ecode,cpu);
+	cpu.start();
+	document.getElementById('output').value=outstr.str;
+	});
+}
+</script>
+</head>
+<body>
+<textarea cols=20 rows=10 id="output" ></textarea>
+<button onclick="doexec()" >Execute</button>
+</body>
+</html>

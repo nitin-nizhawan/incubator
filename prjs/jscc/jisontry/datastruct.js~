@@ -1,0 +1,78 @@
+var ds=(function(){
+        
+        var ds={};
+
+// AST Classes
+//
+//
+	ds.TranslationUnit=function(){
+             this.list=[];
+	}
+	ds.TranslationUnit.prototype={
+		init:function(ed){
+			     this.list=[ed];
+			     return this;
+		},append:function(ed){
+			this.list.push(ed);
+		},accept:function(visitor){
+			visitor.visitTranslationUnit(this);
+		}
+	}
+       
+        ds.ExternalDeclaration=function(){
+
+	};
+        ds.ExternalDeclaration.prototype={
+		init:function(dec){
+			     this.dec=dec;
+			     return this;
+		     },
+		accept:function(visitor){
+			       visitor.visitExternalDeclaration(this);
+		       }
+		     
+	};
+
+        ds.FunctionDefinition=function(){};
+	ds.FunctionDefinition.prototype={
+		init:function(retType,id,params,body){
+			     this.returnType = def;
+			     this.id = id;
+			     this.params=params;
+			     this.body = body;
+
+			     return this;
+		     },accept:function(visitor){
+			     visitor.visitFunctionDefinition(this);
+		     }
+	}
+
+
+
+
+// Code Generator Visitor
+
+	ds.CodeGenVisitor=function(){};
+	ds.CodeGenVisitor.prototype={
+		init:function(){
+			     return this;
+		     },
+                visitTranslationUnit:function(node){
+					     for(var i=0;i<node.list.length;i++){
+						     node.list[i].accept(this);
+					     }
+	        },
+		visitExternalDeclaration:function(obj){
+						 obj.accept(this);
+					 }
+	};
+
+
+
+	return ds;
+})();
+
+
+if(typeof(exports)!=undefined){
+	exports.ds=ds;
+}

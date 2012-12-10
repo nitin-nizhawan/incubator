@@ -1,0 +1,312 @@
+<html>
+<head>
+<script src="cpu.js"></script>
+<script src="loader.js"></script>
+<script src="runtime.js"></script>
+<script src="hw.js"></script>
+<script src="datastruct.js"></script>
+<script src="codegenerator.js"></script>
+<script src="c.js"></script>
+<script>
+var execcode=[
+        
+              0, // nop
+			// preamble
+			  194,22,0,0,0, //jmp to start
+			// method definition
+              66,0,0,0,0,0,  // ldi $a 0
+              70,1, // popr $b
+			  66,2,12,0,0,0, // ldi $c 12
+			  1,  //syscall
+			  193, //ret
+			
+			//  program start
+			  66,0,36,0,0,0, // ldi $a stringaddr
+			  69,0,// push it onto stack
+			  192,3,0,0,0, // call print
+			  2,  // halt
+			  // data section
+			  72,101,108,108,111,32,87,111,114,108,100,10
+              			  // Hello World\n
+			];
+function StringStream(){
+   this.str="";
+   this.strpos=0;
+}
+StringStream.prototype={
+  write:function(code){
+      if(code==0){
+	     this.str+="[NULL]";
+	  } else{
+         this.str+=String.fromCharCode(code);
+	  }
+  },
+  read:function(){
+      return this.str.charCodeAt(this.strpos++);
+  }
+}
+function printcodeln(pc,lbl,str){
+  if(!lbl){
+    return "<tr id='pc"+pc+"' ><td>"+pc+"</td><td>"+lbl+":</td><td>"+str+"</td></tr>";
+  } else {
+      return "<tr><td>"+pc+"</td><td>"+lbl+":</td><td>"+str+"</td></tr>";
+  }
+}
+function PrintCode(libs){
+    var dive = document.getElementById("codevis");
+	var out=""
+	var IS = CPU.InstructionSet.CodeToName;
+	var pc=0;
+    out+=printcodeln(pc,"",IS[0]); pc++;
+	out+=printcodeln(pc,"",IS[66]+" $a "+":__start");pc+=6;
+	out+=printcodeln(pc,"",IS[194]+" $a ");pc+=2;
+    for(var i=0;i<libs.length;i++){
+	   for(var j=0;j<libs[i][0].length;){
+	       var obj = libs[i][0][j];
+		   if(typeof (obj) =="number"){
+		       var s=IS[obj];
+			   var size = cpu.getInstrSize(obj);
+			   for(var k=1;k<size;k++){
+			        if(typeof(libs[i][0][j+k])=="number"){
+					     s+=" "+libs[i][0][j+k]+" ";
+					} else {
+					     s+=" :"+libs[i][0][j+k].ref;
+					}
+			   }
+			   out+=printcodeln(pc,"",s);
+			   pc+=cpu.getInstrSize(obj);j+=size;
+		   }else if("gdef" in obj||"def" in obj){
+		       out+=printcodeln(pc,obj.gdef||obj.def,"");
+		      j++;
+		   }
+	   }
+	}
+	dive.innerHTML="<table>"+out+"</table>";
+}
+function linkLibs(libs,cpu){
+   PrintCode(libs,cpu);
+   // step 1. go over libs one by one and collect local and global definitions
+   var global_defs={};
+   var localdefs=[];
+   
+      // read code section to collect local and global references;
+   var codebytes=[0,66,0,0,0,0,0,194,0];
+   var beginCode = codebytes.length;// we begin loading code at address 6;
+   
+   for(var i=0;i<libs.length;i++){
+       localdefs.push({});
+	   localdefs.codebegin=beginCode;
+	   for(var j=0;j<libs[i][0].length;){
+	       var obj = libs[i][0][j];
+		  // console.log(obj);
+	       if(typeof(obj)=="number"){
+		       j+=cpu.getInstrSize(obj);
+			   beginCode+=cpu.getInstrSize(obj);
+		   } else if("gdef" in obj){
+		       j++;
+			   global_defs[obj.gdef]=beginCode;
+		   } else if("def" in obj){
+		       j++;
+			   localdefs[i][obj.def]=beginCode;
+		   }
+	   }
+	}   
+	//console.log(global_defs);
+	//console.log(localdefs);
+	   // read data section to collect local and global references;
+	   for(var i=0;i<libs.length;i++){
+	       localdefs.databegin=beginCode;
+		   for(var j=0;j<libs[i][1].length;j++){
+		       var obj=libs[i][1][j];
+			   if(typeof(obj)=="number"){
+			       beginCode++;
+			   } else if("gdef" in obj){
+			        global_defs[obj.gdef]=beginCode;
+			   } else if("def" in obj){
+			        localdefs[i][obj.def]=beginCode;
+			   }    
+		   }
+	   }
+	
+//	   console.log(global_defs);
+//	console.log(localdefs);
+	   // output code bytes
+	   codebytes[3]=global_defs["__start"]; // set jump pointer
+	   for(var i=0;i<libs.length;i++){
+	       for(var j=0;j<libs[i][0].length;){
+		       var obj=libs[i][0][j];
+			   if(typeof(obj)=="number"){
+			        var isize = cpu.getInstrSize(obj);
+					for(var k=0;k<isize;k++){
+					    obj = libs[i][0][j+k];
+					    if(typeof(obj)=="number"){
+						    codebytes.push(obj);
+						} else if("ref" in obj){
+						    if(localdefs[i][obj.ref]){
+							   codebytes.push(localdefs[i][obj.ref],0,0,0);k+=3;//skip next three
+							} else if(global_defs[obj.ref]){
+							   codebytes.push(global_defs[obj.ref],0,0,0); k+=3;//skip next three
+							} else {
+							   throw new Error("Linker Error: cannot resolve "+obj.ref+" in lib "+ i +" ");
+							}
+						} else {
+						   throw new Error("Linker Error: invalid data in lib "+i+" at pos "+j+" ");
+						}
+					}
+					j+=isize;
+			   } else {
+			        j++;
+			   }
+		   }
+	   }
+	   // output data bytes;
+	   for(var i=0;i<libs.length;i++){
+	        for(var j=0;j<libs[i][1].length;j++){
+			    var obj = libs[i][1][j];
+				if(typeof(obj)=="number"){
+				   codebytes.push(obj);  
+				} 
+			}
+	   }
+	 return codebytes;
+}
+function DefCtx(){
+}
+DefCtx.prototype=new Array();
+DefCtx.prototype.init=function(){
+     return this;
+};
+DefCtx.prototype.$=function(){
+    for(var i=0;i<arguments.length;i++){
+	    if(typeof(arguments[i])=="number"){
+		   this.push(arguments[i]);
+		} else if("dwd" in arguments[i]){
+		   this.push(arguments[i].dwd,0,0,0);
+		} else {
+		   this.push(arguments[i],0,0,0);
+		}
+	}
+	return this;
+};
+DefCtx.prototype.ascii=function(v){
+   for(var i=0;i<v.length;i++){
+	      this.push(v.charCodeAt(i));
+   }
+   return this;
+};
+DefCtx.prototype.def=function(v){
+   this.push({def:v});
+   return this;
+}
+DefCtx.prototype.dword=function(v){
+    this.push(v,0,0,0);
+    return this;
+}
+DefCtx.prototype.gdef=function(v){
+   this.push({gdef:v});
+   return this;
+}
+
+function loadCode(cpu,cb){
+    var ctx={ascii:function (str){
+      var ret=[];
+	  for(var i=0;i<str.length;i++){
+	      ret.push(str.charCodeAt(i));
+	  }
+	  return ret;
+     },
+	  
+	 };
+	//var ctx=new DefCtx();
+    var hw = lib_hw(DefCtx);
+	var runtime = lib_runtime(ctx);
+	var libs=[runtime];
+	//
+	
+	var parser = new c.Parser();
+	
+	parser.yy.ds=ds;
+	
+	parser.parse(document.getElementById("inpt").value);
+	
+	var cgVisitor = new CodeGenVisitor().init();
+	parser.yy.ast.accept(cgVisitor);
+	console.log(cgVisitor.getCode());
+	libs.push(cgVisitor.getCode());
+	console.log(libs);
+	var code = linkLibs(libs,cpu);
+	var dstr="";
+	for(var i=0;i<code.length;i++){
+	  dstr+=i+":"+code[i]+",";
+	}
+	
+	//console.log(dstr);
+	//console.log(hw);
+	//console.log(runtime);
+	cb(code);
+}
+var lastActive;
+function dbgcb(cpu){
+if(cpu._halted){
+    
+}
+if(lastActive){
+  lastActive.style.backgroundColor='white';
+}
+   document.getElementById("pc"+cpu._regMem[31]).style.backgroundColor='yellow';
+   lastActive=document.getElementById("pc"+cpu._regMem[31]);
+   var str="";
+   str+=" $a="+cpu._regMem[0];
+   str+=" $b="+cpu._regMem[1];
+   str+=" $c="+cpu._regMem[2];
+   str+=" $sp="+cpu._regMem[3];
+   str+=" $fp="+cpu._regMem[4];
+   str+=" $ra="+cpu._regMem[29];
+   window.location.hash=str;
+   document.onkeypress=function(){
+       cpu.doNext();
+   }
+   document.getElementById('output').value=cpu._outStream.str;
+  // console.log(cpu._regMem[31]);
+  // console.log("Next Instr "+ cpu._mem[cpu._regMem[31]]);
+}
+var cpu;
+function doexec(){
+    // link code
+	  cpu = new CPU();
+	  lastActive=null;
+	 var instr = new StringStream();
+	var outstr = new StringStream();
+	cpu.init(64*1024,instr,outstr);// 64K words
+	/*cpu.setDebugCallback(function(){
+	   dbgcb(cpu);
+	});*/
+    loadCode(cpu,function(ecode){
+	console.log(ecode);
+   	var loader = new Loader();
+	loader.init(ecode,cpu);
+	cpu.start();
+	document.getElementById('output').value=cpu._outStream.str;
+	});
+}
+function donext(){
+   cpu.doNext();
+}
+</script>
+</head>
+<body>
+<textarea cols=40 rows=20 id="inpt">
+void puts(char *s){
+	   __sscall_(0,s,12);
+}
+int main(){
+    puts("Hello World\n");
+}
+</textarea>
+<textarea cols=40 rows=20 id="output" ></textarea>
+<button onclick="doexec()" >Execute</button>
+<button onclick="donext()"> Next</button>
+<div id="stackvis" ></div>
+<div id="codevis"></div>
+</body>
+</html>

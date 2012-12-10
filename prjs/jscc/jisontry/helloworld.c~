@@ -1,4 +1,4 @@
-void __sscall_(int,int,int);
+void __sscall_(int type,int addr,int len);
 int main()
 { 
 	__sscall_(0,"Hello World",12);

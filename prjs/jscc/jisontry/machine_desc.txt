@@ -1,0 +1,27 @@
+32bit addresses, Byte word size, 32 32bit-registers
+
+
+
+1,mvb (move byte) destaddr,srcaddr  ( instruction size 5 )
+2,sout (stdout)   byte (instuction size 2)
+3,sin  (stdin)    byte  (instruction size 2)
+4,add   reg,  reg
+5,sub   reg,  reg
+5,load  reg,  mem
+6,loadi reg, imm
+7,call  mem
+8,ret
+
+
+[258,0,0,258,1,10,258,2,12,1,72,101,108,108,111,32,87,111,114,108,100,10]
+
+ldi $a 0
+ldi $b 10
+ldi $c 12
+syscall
+Hellow\n
+
+
+
+128 64 32 16 4 2 1
+000 0000000000

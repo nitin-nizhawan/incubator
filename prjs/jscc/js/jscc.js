@@ -16,8 +16,8 @@ var JSCC=(function(){
 	   exitScope:function(){
 	       this.list.pop();
 	   },
-	   add:function(id,type){
-	       this.list[this.list.length-1].push({id:id,type:type});
+	   add:function(id,val){
+	       this.list[this.list.length-1].push({id:id,val:val});
 	   }
    };
    function Mem(){
