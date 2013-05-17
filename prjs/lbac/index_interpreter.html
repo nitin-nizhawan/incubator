@@ -18,24 +18,25 @@ label {
   color:white;
 }
 </style>
-<script src="js/lbac.js" ></script>
+<script src="js/interpreter.js" ></script>
 <script>
    function runit(){
      try{
 	   document.getElementById("dbgwin").value="";
 	   document.getElementById('outpt').value="";
-       LBAC.input=document.getElementById('srccd').value||"";
-       LBAC.Main();
-	   document.getElementById('outpt').value=LBAC.output;
+       INTER.source=document.getElementById('srccd').value||"";
+	   INTER.input = document.getElementById('inpt').value||"";
+       INTER.Main();
+	   document.getElementById('outpt').value=INTER.output;
 	  }catch(e){
-	     document.getElementById('outpt').value=LBAC.output;
+	     document.getElementById('outpt').value=INTER.output;
 	     document.getElementById("dbgwin").value=e;
 	  }
    }
 </script>
 </head>
 <body >
-<h2 style="background-color:blue;border:1px white solid;padding:0px;margin:0px;color:white;">Toofo</h2>
+<h2 style="background-color:blue;border:1px white solid;padding:0px;margin:0px;color:white;">Let's Build a compiler</h2>
 <br/>
 <table>
 <tr>
