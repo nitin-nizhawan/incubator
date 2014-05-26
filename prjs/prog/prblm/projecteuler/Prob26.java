@@ -101,62 +101,37 @@ must be 8. The quotient is 1369863, so the decimal expansion must be
  *
  *
  */
+/*
+ From another source it was found that length of recurring decimals is equal to the multiplicative order of 10 w.r.t to d in 1/d
+ 
 
+*/
  import java.util.HashMap;
 
  public class Prob26{
-	 long [][] factorize(long n){
-	       long [] factors = new long[64]	;// log2(MAX_LONG);
-	       long [] times = new long[64]; // for each factor;
-	       long numfact = 0; // number of factors; 
-                 long div=2;
-		 while(n>1){
-	           long count = 0;
-                   while(n%div==0){
-                    count++;
-		    n/=div;
-	           }
-		   if(count>0){
-			 factors[numfact]=div;
-			 times[numfact++]=count;
-		   }
-		   if(div==2){
-			   div++;
-		   }
-		   else{
-			   div+=2;
-		   }
+	 public static int multiplicative_order_10(int n){
+		 int ret = 1;
+		 for(int i=1;i<=n;i++){
+			 ret*=10;
+			 ret = ret%n;
+			 if(ret == 1){
+				 return i;
+			 }
 		 }
-	    long [][] retVal = new long [numfact][2];	 
-	    for(int i=0;i<numfact;i++){
-		    retVal[i][0]=factors[i];
-		    retVal[i][1]=times[i];
-
-	    }
-	    return retVal;
-	 }
-	 long recPeriod(long n){
-		long [][] factors = factorize(n);
-		 long e[] = new long[factors.length];
-		 long k[] = new long[factors.length];
-		 for(int i=0;i<factors.length;i++){// for each factor
-			 
-
-		 }
-            return hm;
+		 return -1;
 	 }
 	 public static void main(String args[]){
-            /* long m = 0;
-	     long n=1;
-	     for(int i=2;i<=1000;i++){
-                long p = recPeriod(i);
-		if(p>m){
-			m=p;
-			n=i;
-		}
-	     }*/
-
-        // lets implement dirty solution
-	for(int i=1;i<10
+                 int max = 1;
+                 int max_i = 0;
+		 for(int i=1;i<=1000;i++){
+			 int mo_10 =     multiplicative_order_10(i);
+			 //prints all, find the max
+                         if(mo_10 > max){
+                             max = mo_10;
+                             max_i = i;
+                         }
+		 }
+		 System.out.println((max+","+max_i));
+                
 	 }
  }
