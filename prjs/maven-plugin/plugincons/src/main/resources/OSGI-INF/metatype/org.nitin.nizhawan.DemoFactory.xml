@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.0.0">
+<OCD name="DemoServer Factory" id="munique.demo" description="Demo Server Config">
+<AD name="ref" id="unique.demo.ref" type="String"
+description="The port the Echo Server listens on"/>
+</OCD>
+<Designate pid="org.nitin.nizhawan.DemoFactory">
+<Object ocdref="munique.demo"/>
+</Designate>
+</MetaData>
