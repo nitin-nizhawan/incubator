@@ -6,7 +6,7 @@ public class StringMatchingTest
     [Fact]
     public void TestRabinKarp()
     {
-         Assert.True(StringMatching.RabinKarp("nitin","nitin") == 0," should be true");
+         Assert.Equal(10,StringMatching.RabinKarp("TEST","THIS IS A TEST TEXT"));
     }
 
     [Fact]

@@ -1,12 +1,12 @@
-#include "string_matching.h"
+#include "rabin_karp.h"
 #include<iostream>
 using namespace std;
 using namespace part7::chap32;
 
 int main(){
 
-    auto idx = StringMatching::RabinKarp(
-        "TEST",
+    RabinKarpSearch searcher("TEST");
+    auto idx = searcher.Search(
         "THIS IS A TEST TEXT"
     );
     

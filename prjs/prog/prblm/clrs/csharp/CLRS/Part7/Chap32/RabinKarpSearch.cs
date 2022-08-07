@@ -6,6 +6,7 @@ public class RabinKarpSearch {
     public RabinKarpSearch(string pattern){
 	    this.needle = pattern;
 	    this.phash = new RollingHash(pattern,pattern.Length);
+
     }
     public int Search(string haystack){
         if(needle==""){
@@ -48,7 +49,7 @@ public class RabinKarpSearch {
  private class RollingHash {
         int hash;
         int M = 9973;
-        int B = 26;
+        int B =  256;
         int H = 1;
         public RollingHash(string s, int len){
             hash = 0;
@@ -56,15 +57,15 @@ public class RabinKarpSearch {
                H = (H*B)%M;
             }
             for(int i=0;i<len;i++){
-                hash = ((hash*B)%M + (s[i]-'a'))%M;
+                hash = ((hash*B)%M + (s[i]-'\0'))%M;
             }
         }
         public int val(){
             return hash;
         }
         public int slide(string s,int i,int len){
-            var cprev = s[i-1] - 'a';
-            var cnow = s[i+len -1] -'a';
+            var cprev = s[i-1] - '\0';
+            var cnow = s[i+len -1] -'\0';
             var additive_inverse = M - (cprev*H)%M;
             hash = (((hash + additive_inverse)*B)%M + cnow)%M;
             return hash;
