@@ -1,7 +1,7 @@
 namespace CLRS.Tests;
 using CLRS.Part7.Chap32;
 
-public class UnitTest1
+public class StringMatchingTest
 {
     [Fact]
     public void TestRabinKarp()
