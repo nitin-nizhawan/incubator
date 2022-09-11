@@ -1,0 +1,106 @@
+PERF::calcprimes: 764 microseconds
+N=1,K=5
+PERF::prime_expo: 9 microseconds
+PERF::result: 0 microseconds
+1
+N=2,K=2
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 6 microseconds
+30
+N=10,K=1
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+180
+N=6,K=1
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+72
+N=6,K=2
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+3600
+N=6,K=4
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+200326359
+N=77,K=3
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 6 microseconds
+280559773
+N=143,K=3
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 6 microseconds
+403662531
+N=30,K=2
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+2808000
+N=30,K=3
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+384334850
+N=300,K=1
+PERF::prime_expo: 1 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+260400
+N=300,K=2
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+765243797
+N=300,K=3
+PERF::prime_expo: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+773131385
+N=777317,K=1
+PERF::prime_expo: 7 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 6 microseconds
+222491578
+N=777317,K=2
+PERF::prime_expo: 7 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+672178551
+N=777317,K=90000
+PERF::prime_expo: 7 microseconds
+PERF::raiseBy2powK: 4 microseconds
+PERF::result: 10 microseconds
+46913113
+N=268435456,K=2
+PERF::prime_expo: 2 microseconds
+PERF::raiseBy2powK: 0 microseconds
+PERF::result: 5 microseconds
+165075278
+N=268435456,K=90000
+PERF::prime_expo: 2 microseconds
+PERF::raiseBy2powK: 3 microseconds
+PERF::result: 8 microseconds
+584086748
